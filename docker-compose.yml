@@ -1,0 +1,22 @@
+
+services:
+  # Máy nạn nhân (Server)
+  victim:
+    build: .
+    container_name: demo_victim
+    privileged: true  # QUAN TRỌNG: Cần quyền này để chỉnh Firewall và nghe card mạng
+    networks:
+      - hack_net
+
+  # Máy tấn công
+  attacker:
+    image: alpine:latest
+    container_name: demo_attacker
+    # Cài thêm nmap bên cạnh curl
+    command: sh -c "apk add --no-cache curl nmap iputils && tail -f /dev/null"
+    networks:
+      - hack_net
+
+networks:
+  hack_net:
+    driver: bridge
